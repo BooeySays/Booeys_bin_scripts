@@ -1,0 +1,34 @@
+#!/bin/bash
+
+NEW_SH_FILENAME=$1
+if [ -f $NEW_SH_FILENAME ]; then
+	echo -e """
+	\033[31;47m ERROR \033[m\033[01;37m
+	
+	There is already a file/directory in the current
+	directory with the same name.
+\033[m
+"""
+else
+	echo -e """#!/bin/bash
+
+""" > "$NEW_SH_FILENAME"
+	nano +3.0 "$NEW_SH_FILENAME"
+fi
+echo -en """
+
+Would you like to CHMOD this script ?
+
+[Y/n]: """
+read -n 1 -r CHMOD_YN
+case $CHMOD_YN in
+''|'y'|'Y')
+	chmod u+x "$NEW_SH_FILENAME"
+	;;
+'n'|'N')
+	;;
+*)
+	echo "Invalid key. Exiting and leaving script un-chmod'd"
+	;;
+esac
+unset NEW_SH_FILENAME
